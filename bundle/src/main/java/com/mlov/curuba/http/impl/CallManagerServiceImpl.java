@@ -1,16 +1,18 @@
 package com.mlov.curuba.http.impl;
 
+import com.google.gson.Gson;
+import com.mlov.curuba.config.SpotifyApiConfig;
 import com.mlov.curuba.http.CallManagerService;
 import com.mlov.curuba.http.HttpOperations;
 import com.mlov.curuba.http.RequestManager;
-import com.mlov.curuba.http.SpotifyRequest;
+import com.mlov.curuba.models.SpotifyRequest;
+import com.mlov.curuba.models.Token;
 import org.apache.felix.scr.annotations.Component;
 import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.Service;
 import org.apache.http.Header;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 
 
 @Component(metatype = true, immediate = true, label = "Call Manager Service", description = "Create request and perform calls to Spotify")
@@ -27,26 +29,44 @@ public class CallManagerServiceImpl implements CallManagerService {
     @Reference
     private HttpOperations httpOperations;
 
-    private String accessToken;
+    @Reference
+    SpotifyApiConfig spotifyApiConfig;
 
-    public void createToken() throws IOException {
-        requestManager.setSpotifyRequestBuilder(new SpotifyAuthenticationBuilderImpl());
+    private Gson gson = new Gson();
+
+    private Token accessToken;
+
+    private void createToken() throws IOException {
+        requestManager.setSpotifyRequestBuilder(createAuthenticationRequestBuilder());
         requestManager.buildRequest();
         SpotifyRequest spotifyRequest = requestManager.getSpotifyRequest();
-        accessToken = httpOperations.post(spotifyRequest.getUri(), spotifyRequest.getHeaders().toArray(new Header[spotifyRequest.getHeaders().size()]), spotifyRequest.getBody());
-        int g = 8;
+        String tokenJson = httpOperations.post(spotifyRequest.getUri(), spotifyRequest.getHeaders().toArray(new Header[spotifyRequest.getHeaders().size()]), spotifyRequest.getBody());
+        accessToken = gson.fromJson(tokenJson, Token.class);
+
     }
-    public String getJson(String id, CallType callType){
-        try {
-            createToken();
-        } catch (IOException e) {
-            e.printStackTrace();
-            int h = 2;
-        }
+
+    public String getJson(String id, CallType callType) throws IOException {
+        validateAccessToken();
+        requestManager.setSpotifyRequestBuilder(createSpotifyDataRequestBuilder(id));
+        requestManager.buildRequest();
         SpotifyRequest spotifyRequest = requestManager.getSpotifyRequest();
-      //  result = httpOperationsImpl.post(spotifyRequest.getUri(), spotifyRequest.getHeaders().toArray(new Header[spotifyRequest.getHeaders().size()]), spotifyRequest.getBody());
-
-        return null;
+        String result = httpOperations.get(spotifyRequest.getUri(), spotifyRequest.getHeaders().toArray(new Header[spotifyRequest.getHeaders().size()]));
+        return result;
     }
 
+    private void validateAccessToken() throws IOException {
+        if (accessToken == null) {
+            createToken();
+        }
+    }
+
+    private SpotifyAuthenticationRequestBuilder createAuthenticationRequestBuilder() {
+        return new SpotifyAuthenticationRequestBuilder(spotifyApiConfig.getAuthorizationEndPoint()
+                , spotifyApiConfig.getClientId(), spotifyApiConfig.getClientKey());
+    }
+
+    private SpotifyDataRequestBuilder createSpotifyDataRequestBuilder(String id) {
+        return new SpotifyDataRequestBuilder(spotifyApiConfig.getArtistAlbumsEndPoint()
+                , accessToken.getAccessToken(), id);
+    }
 }

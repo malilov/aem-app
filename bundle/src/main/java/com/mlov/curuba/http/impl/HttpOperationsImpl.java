@@ -7,6 +7,7 @@ import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.StringEntity;
@@ -23,9 +24,10 @@ public class HttpOperationsImpl implements HttpOperations {
 
     private HttpClient client;
 
-    public HttpOperationsImpl(){
+    public HttpOperationsImpl() {
         client = getHttpClient();
     }
+
     public String post(URI uri, Header[] headers, HttpEntity body) throws
             IOException {
         assert (uri != null);
@@ -37,9 +39,36 @@ public class HttpOperationsImpl implements HttpOperations {
         httpPost.setHeaders(headers);
         httpPost.setEntity(body);
         ((StringEntity) body).setContentType("application/x-www-form-urlencoded");
-       HttpResponse response = execute(httpPost);
+        HttpResponse response = execute(httpPost);
 
         httpPost.releaseConnection();
+        System.out.println("Response Code : "
+                + response.getStatusLine().getStatusCode());
+
+        BufferedReader rd = new BufferedReader(
+                new InputStreamReader(response.getEntity().getContent()));
+
+        StringBuffer result = new StringBuffer();
+        String line = "";
+        while ((line = rd.readLine()) != null) {
+            result.append(line);
+        }
+        return result.toString();
+    }
+
+    public String get(URI uri, Header[] headers) throws
+            IOException {
+        assert (uri != null);
+        assert (!uri.toString().equals(""));
+
+        final HttpGet httpGet = new HttpGet();
+
+        httpGet.setURI(uri);
+        httpGet.setHeaders(headers);
+
+        HttpResponse response = execute(httpGet);
+
+        httpGet.releaseConnection();
         System.out.println("Response Code : "
                 + response.getStatusLine().getStatusCode());
 

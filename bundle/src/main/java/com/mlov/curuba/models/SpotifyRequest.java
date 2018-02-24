@@ -1,4 +1,4 @@
-package com.mlov.curuba.http;
+package com.mlov.curuba.models;
 
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;

@@ -1,16 +1,11 @@
 package com.mlov.curuba.servlets;
 
-import com.mlov.curuba.config.SpotifyApiConfig;
+import com.mlov.curuba.core.AlbumsService;
 import com.mlov.curuba.http.CallManagerService;
-import com.mlov.curuba.http.RequestManager;
 import com.mlov.curuba.http.impl.CallManagerServiceImpl;
-import com.mlov.curuba.http.impl.RequestManagerImpl;
-import com.mlov.curuba.http.SpotifyRequest;
-import com.mlov.curuba.http.impl.HttpOperationsImpl;
 import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.Service;
 import org.apache.felix.scr.annotations.sling.SlingServlet;
-import org.apache.http.Header;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.servlets.SlingAllMethodsServlet;
@@ -26,7 +21,7 @@ import java.io.PrintWriter;
 public class AlbumsServlet extends SlingAllMethodsServlet {
 
     @Reference
-    private CallManagerService callManagerService;
+    private AlbumsService albumsService;
 
 
     @Override
@@ -34,7 +29,8 @@ public class AlbumsServlet extends SlingAllMethodsServlet {
             throws ServletException, IOException {
         String result = "Processed";
         PrintWriter writer = response.getWriter();
-        callManagerService.getJson("a", CallManagerServiceImpl.CallType.ARTIST_ALBUMS);
+        albumsService.getArtistAlbums("4dpARuHxo51G3z768sgnrY");
+      //  callManagerService.getJson("a", CallManagerServiceImpl.CallType.ARTIST_ALBUMS);
        /* HttpOperationsImpl httpOperationsImpl = new HttpOperationsImpl();
         requestManager.buildRequest();
         SpotifyRequest spotifyRequest = requestManager.getSpotifyRequest();
