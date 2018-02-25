@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="${properties.jcr:language}">
+<head>
+    <sly data-sly-include="/libs/wcm/core/components/init/init.jsp" data-sly-unwrap/>
+    <sly data-sly-use.clientLib="/libs/granite/sightly/templates/clientlib.html" data-sly-call="${clientLib.css @ categories='curuba.all'}" data-sly-unwrap/>
+
+    <sly data-sly-test="${wcmmode.edit || wcmmode.design || wcmmode.preview}"
+         data-sly-use.clientLib="/libs/granite/sightly/templates/clientlib.html"
+         data-sly-call="${clientLib.js @ categories='cq.shared'}"
+         data-sly-unwrap/>
+
+</head>
+<body class="page ${currentPage.template.name}">
+  <h1>Artist: ${currentPage.title}</h1>
+    <div data-sly-resource="${@path='./data',resourceType='curuba/components/content/artist'}"></div>
+  </body>
+</html>
