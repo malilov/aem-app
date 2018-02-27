@@ -6,7 +6,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 public class Utils {
-    private static final String ALBUM_LINE = "%s (Link: %s). ";
+    private static final String ALBUM_LINE = "Album Title: %s Link: %s ";
     private static final String NAME = "name";
     private static final String ITEMS = "items";
     private static final String LINK = "href";

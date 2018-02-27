@@ -3,15 +3,18 @@
 
 <script type="text/javascript">
     function callSpotify(id){
+    var xhttp = new XMLHttpRequest(),
+        ALBUMS = "Albums: <br />",
+        URI = "http://localhost:4502/bin/spotify/albums?artistId="+id
+        callResponse="";
 
-       var xhttp = new XMLHttpRequest();
       xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-          document.getElementById("albums").innerHTML =
-          this.responseText;
+			callResponse = ALBUMS+this.responseText;
+         	document.getElementById("albums").innerHTML = callResponse;
         }
       };
-      xhttp.open("GET", "http://localhost:4502/bin/spotify/albums?artistId=4dpARuHxo51G3z768sgnrY", true);
+      xhttp.open("GET", URI, true);
       xhttp.send();
 
     }
@@ -31,6 +34,6 @@
 </table>
 <br />
 
-Albums:
+
 <div id="albums">
 </div>
