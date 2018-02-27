@@ -1,11 +1,14 @@
 package com.mlov.curuba.core.impl;
 
+import com.mlov.curuba.exceptions.UnauthorizedException;
 import com.mlov.curuba.http.CallManagerService;
 import com.mlov.curuba.core.AlbumsService;
 import com.mlov.curuba.http.impl.CallManagerServiceImpl;
 import org.apache.felix.scr.annotations.Component;
 import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
@@ -13,15 +16,20 @@ import java.io.IOException;
 @Service(AlbumsService.class)
 public class AlbumsServiceImpl implements AlbumsService {
 
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+
     @Reference
     private CallManagerService callManagerService;
 
     public String getArtistAlbums(String artistId) {
+        String albums = null;
         try {
-            callManagerService.getJson(artistId, CallManagerServiceImpl.CallType.ARTIST_ALBUMS);
+            albums = callManagerService.getJson(artistId, CallManagerServiceImpl.CallType.ARTIST_ALBUMS);
+        } catch (UnauthorizedException e) {
+            logger.error("Was not possible get API authorization",e);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Was not possible to perform operation by networking issues",e);
         }
-        return null;
+        return albums;
     }
 }

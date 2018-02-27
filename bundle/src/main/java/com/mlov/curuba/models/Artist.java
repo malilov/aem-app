@@ -1,25 +1,19 @@
 package com.mlov.curuba.models;
 
-import com.adobe.cq.sightly.WCMUsePojo;
-
-import javax.jcr.Node;
-
-public class Artist extends WCMUsePojo {
+public class Artist  {
 
     private static final String NAME = "name";
     private static final String LAST_NAME = "lastName";
     private static final String ARTIST_ID = "spotifyId";
+    private static final String ARTISTS_SET = "setArtistFields";
+
 
     private String name;
     private String lastName;
     private String artistId;
+    private String artistsJson;
 
-    public void activate() throws Exception {
-        Node node = getResource().adaptTo(Node.class);
-        setName(node.getProperty(NAME).getString());
-        setLastName(node.getProperty(LAST_NAME).getString());
-        setArtistId(node.getProperty(ARTIST_ID).getString());
-    }
+
 
     public String getName() {
         return name;

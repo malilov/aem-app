@@ -23,21 +23,19 @@ public class AlbumsServlet extends SlingAllMethodsServlet {
     @Reference
     private AlbumsService albumsService;
 
+    private static final String ARTIST_ID = "artistId";
+
 
     @Override
     protected void doGet(SlingHttpServletRequest request, SlingHttpServletResponse response)
             throws ServletException, IOException {
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json");
         String result = "Processed";
         PrintWriter writer = response.getWriter();
-        albumsService.getArtistAlbums("4dpARuHxo51G3z768sgnrY");
-      //  callManagerService.getJson("a", CallManagerServiceImpl.CallType.ARTIST_ALBUMS);
-       /* HttpOperationsImpl httpOperationsImpl = new HttpOperationsImpl();
-        requestManager.buildRequest();
-        SpotifyRequest spotifyRequest = requestManager.getSpotifyRequest();
-        result = httpOperationsImpl.post(spotifyRequest.getUri(), spotifyRequest.getHeaders()
-                .toArray(new Header[spotifyRequest.getHeaders().size()]), spotifyRequest.getBody());*/
-      //  callManagerService.getJson("", CallManagerServiceImpl.CallType.ARTIST_ALBUMS);
-        result = result + "VALOR:" ;
+
+        String artistId = request.getParameter(ARTIST_ID);
+        result = result + albumsService.getArtistAlbums(artistId);
         writer.write(result);
         writer.flush();
         writer.close();

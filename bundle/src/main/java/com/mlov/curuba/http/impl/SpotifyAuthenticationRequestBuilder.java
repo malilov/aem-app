@@ -8,6 +8,8 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.entity.ContentType;
 import org.apache.http.message.BasicNameValuePair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
@@ -17,6 +19,7 @@ import java.util.List;
 
 public class SpotifyAuthenticationRequestBuilder extends SpotifyRequestBuilder {
 
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Reference
     SpotifyApiConfig spotifyApiConfig;
@@ -35,11 +38,12 @@ public class SpotifyAuthenticationRequestBuilder extends SpotifyRequestBuilder {
     private String clientKey;
 
 
-    public SpotifyAuthenticationRequestBuilder(String uri, String clientId, String clientKey){
+    public SpotifyAuthenticationRequestBuilder(String uri, String clientId, String clientKey) {
         this.uri = uri;
         this.clientId = clientId;
         this.clientKey = clientKey;
     }
+
     public void withAuthorization() {
         super.spotifyRequest = spotifyRequest;
         addHeader(AUTHORIZATION, getBasicToken());
@@ -48,7 +52,9 @@ public class SpotifyAuthenticationRequestBuilder extends SpotifyRequestBuilder {
     public void withContentType() {
         if (spotifyRequest.getHeaders() != null) {
             ContentType.create(CONTENT_TYPE_URL_ENCODED);
-            addHeader(CONTENT_TYPE,ContentType.create(CONTENT_TYPE_URL_ENCODED).getMimeType());
+            addHeader(CONTENT_TYPE, ContentType.create(CONTENT_TYPE_URL_ENCODED).getMimeType());
+        } else {
+            logger.warn("Authorization request, headers are null");
         }
     }
 

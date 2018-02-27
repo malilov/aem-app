@@ -8,12 +8,16 @@ import com.mlov.curuba.models.Token;
 import org.apache.felix.scr.annotations.Component;
 import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.UnsupportedEncodingException;
 
 @Component(metatype = true, immediate = true, label = "Request Manager Impl", description = "Call to Request Builders")
 @Service(RequestManager.class)
 public class RequestManagerImpl implements RequestManager {
+
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private static Token accessToken;
 

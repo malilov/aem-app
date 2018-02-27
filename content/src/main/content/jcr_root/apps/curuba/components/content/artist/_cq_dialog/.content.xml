@@ -1,56 +1,108 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
-    jcr:primaryType="nt:unstructured"
-    jcr:title="Artists"
-    sling:resourceType="cq/gui/components/authoring/dialog"
-    helpPath="en/cq/current/wcm/default_components.html#Text">
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0"
+          xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+          jcr:primaryType="nt:unstructured"
+          jcr:title="Artists"
+          sling:resourceType="cq/gui/components/authoring/dialog"
+          helpPath="en/cq/current/wcm/default_components.html#Text">
     <content
-        jcr:primaryType="nt:unstructured"
-        sling:resourceType="granite/ui/components/foundation/container">
-        <layout
             jcr:primaryType="nt:unstructured"
-            sling:resourceType="granite/ui/components/foundation/layouts/tabs"
-            type="nav"/>
+            sling:resourceType="granite/ui/components/foundation/container">
+        <layout
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="granite/ui/components/foundation/layouts/tabs"
+                type="nav"/>
         <items jcr:primaryType="nt:unstructured">
-            <artistsContainer
+
+            <tab0
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="granite/ui/components/foundation/form/multifield"
-                    class="full-width"
-                    fieldDescription="Click 'Add field' to add a new artist">
-                <field
+                    jcr:title="Identification"
+                    sling:resourceType="granite/ui/components/foundation/section">
+                <layout
                         jcr:primaryType="nt:unstructured"
-                        sling:resourceType="granite/ui/components/foundation/form/fieldset"
-                        acs-commons-nested=""
-                        name="./setArtistFields">
-                    <layout
+                        sling:resourceType="granite/ui/components/foundation/layouts/fixedcolumns"
+                        margin="{Boolean}false"/>
+                <items jcr:primaryType="nt:unstructured">
+                    <column
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="granite/ui/components/foundation/layouts/fixedcolumns"
-                            method="absolute"/>
-                    <items jcr:primaryType="nt:unstructured">
-                        <column
-                                jcr:primaryType="nt:unstructured"
-                                sling:resourceType="granite/ui/components/foundation/container">
-                            <items jcr:primaryType="nt:unstructured">
-                                <artistName
+                            sling:resourceType="granite/ui/components/foundation/container">
+                        <items jcr:primaryType="nt:unstructured">
+                            <artistName
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/foundation/form/textfield"
+                                    fieldLabel="Name"
+                                    name="./name"/>
+                            <artistLastname
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/foundation/form/textfield"
+                                    fieldLabel="Last Name"
+                                    name="./lastName"/>
+                            <spotifyId
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/foundation/form/textfield"
+                                    fieldLabel="Spotify Id"
+                                    name="./spotifyId"/>
+                        </items>
+                    </column>
+                </items>
+            </tab0>
+            <tab1
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Contact Info"
+                    sling:resourceType="granite/ui/components/foundation/section">
+                <layout
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/foundation/layouts/fixedcolumns"
+                        margin="{Boolean}false"/>
+                <items jcr:primaryType="nt:unstructured">
+                    <column
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="granite/ui/components/foundation/container">
+                        <items jcr:primaryType="nt:unstructured">
+                            <artistsContainer
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/foundation/form/multifield"
+                                    class="full-width"
+                                    fieldDescription="Click 'Add field' to add a new artist">
+                                <field
                                         jcr:primaryType="nt:unstructured"
-                                        sling:resourceType="granite/ui/components/foundation/form/textfield"
-                                        fieldLabel="Name"
-                                        name="./name"/>
-                                <artistLastname
-                                        jcr:primaryType="nt:unstructured"
-                                        sling:resourceType="granite/ui/components/foundation/form/textfield"
-                                        fieldLabel="Last Name"
-                                        name="./lastName"/>
-                                <spotifyId
-                                        jcr:primaryType="nt:unstructured"
-                                        sling:resourceType="granite/ui/components/foundation/form/textfield"
-                                        fieldLabel="Spotify Id"
-                                        name="./spotifyId"/>
-                            </items>
-                        </column>
-                    </items>
-                </field>
-            </artistsContainer>
+                                        sling:resourceType="granite/ui/components/foundation/form/fieldset"
+                                        acs-commons-nested=""
+                                        name="./setArtistFields">
+                                    <layout
+                                            jcr:primaryType="nt:unstructured"
+                                            sling:resourceType="granite/ui/components/foundation/layouts/fixedcolumns"
+                                            method="absolute"/>
+                                    <items jcr:primaryType="nt:unstructured">
+                                        <column
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/foundation/container">
+                                            <items jcr:primaryType="nt:unstructured">
+                                                <phone
+                                                        jcr:primaryType="nt:unstructured"
+                                                        sling:resourceType="granite/ui/components/foundation/form/textfield"
+                                                        fieldLabel="Phone"
+                                                        name="./phone"/>
+                                                <address
+                                                        jcr:primaryType="nt:unstructured"
+                                                        sling:resourceType="granite/ui/components/foundation/form/textfield"
+                                                        fieldLabel="Address"
+                                                        name="./address"/>
+                                                <postalCode
+                                                        jcr:primaryType="nt:unstructured"
+                                                        sling:resourceType="granite/ui/components/foundation/form/textfield"
+                                                        fieldLabel="Postal Code"
+                                                        name="./postalCode"/>
+                                            </items>
+                                        </column>
+                                    </items>
+                                </field>
+                            </artistsContainer>
+                        </items>
+                    </column>
+                </items>
+            </tab1>
+
         </items>
     </content>
 </jcr:root>
