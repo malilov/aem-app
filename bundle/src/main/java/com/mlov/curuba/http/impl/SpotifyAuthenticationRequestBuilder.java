@@ -1,9 +1,7 @@
 package com.mlov.curuba.http.impl;
 
-import com.mlov.curuba.config.SpotifyApiConfig;
 import com.mlov.curuba.models.SpotifyRequest;
 import com.mlov.curuba.http.SpotifyRequestBuilder;
-import org.apache.felix.scr.annotations.Reference;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.entity.ContentType;
@@ -20,9 +18,6 @@ import java.util.List;
 public class SpotifyAuthenticationRequestBuilder extends SpotifyRequestBuilder {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
-
-    @Reference
-    SpotifyApiConfig spotifyApiConfig;
 
     private static final String CONTENT_TYPE = "Content-Type";
     private static final String CONTENT_TYPE_URL_ENCODED = "application/x-www-form-urlencoded";
@@ -66,7 +61,10 @@ public class SpotifyAuthenticationRequestBuilder extends SpotifyRequestBuilder {
     public void withBody() throws UnsupportedEncodingException {
         List<NameValuePair> body = new ArrayList<NameValuePair>();
         body.add(new BasicNameValuePair(GRANT_TYPE, CLIENT_CREDENTIALS));
-        spotifyRequest.setBody(new UrlEncodedFormEntity(body));
+
+        UrlEncodedFormEntity entityBody = new UrlEncodedFormEntity(body);
+        entityBody.setContentType(CONTENT_TYPE_URL_ENCODED);
+        spotifyRequest.setBody(entityBody);
     }
 
 

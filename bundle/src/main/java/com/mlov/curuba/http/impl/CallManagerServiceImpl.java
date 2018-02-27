@@ -51,9 +51,6 @@ public class CallManagerServiceImpl implements CallManagerService {
         accessToken = gson.fromJson(tokenJson, Token.class);
     }
 
-    private void refreshToken(){
-
-    }
     public String getJson(String id, CallType callType) throws IOException, UnauthorizedException {
         validateAccessToken();
         requestManager.setSpotifyRequestBuilder(createSpotifyDataRequestBuilder(id));

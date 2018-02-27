@@ -6,6 +6,7 @@ import com.google.gson.JsonSyntaxException;
 import com.mlov.curuba.exceptions.UnauthorizedException;
 import com.mlov.curuba.http.HttpOperations;
 import com.mlov.curuba.http.HttpStatus;
+import com.mlov.curuba.http.Utils;
 import org.apache.felix.scr.annotations.Component;
 import org.apache.felix.scr.annotations.Service;
 import org.apache.http.Header;
@@ -34,6 +35,7 @@ public class HttpOperationsImpl implements HttpOperations {
     private static final String MESSAGE = "message";
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private HttpClient client;
+    private Utils utils = new Utils();
 
     public HttpOperationsImpl() {
         client = getHttpClient();
@@ -44,12 +46,12 @@ public class HttpOperationsImpl implements HttpOperations {
         assert (uri != null);
         assert (!uri.toString().equals(""));
 
-        final HttpPost httpPost = new HttpPost();
+        HttpPost httpPost = new HttpPost();
 
         httpPost.setURI(uri);
         httpPost.setHeaders(headers);
         httpPost.setEntity(body);
-        ((StringEntity) body).setContentType("application/x-www-form-urlencoded");
+
         HttpResponse response = execute(httpPost);
 
         httpPost.releaseConnection();
@@ -72,31 +74,12 @@ public class HttpOperationsImpl implements HttpOperations {
     }
 
     private String getBody(HttpResponse response) throws IOException, UnauthorizedException {
-        final String bodyResponse = response.getEntity() != null
-                ? EntityUtils.toString(response.getEntity(), UTF_8)
-                : null;
-        final StatusLine statusLine = response.getStatusLine();
+        String bodyResponse = utils.getBody(response);
+        StatusLine statusLine = response.getStatusLine();
         if (statusLine.getStatusCode() == HttpStatus.NOT_VALID_TOKEN.getCode()) {
-            throw new UnauthorizedException(getErrorMessage(bodyResponse));
+            throw new UnauthorizedException(utils.getErrorMessage(bodyResponse));
         }
         return bodyResponse;
-    }
-
-    private String getErrorMessage(String bodyResponse) {
-        String errorMessage = HttpStatus.NOT_VALID_TOKEN.getDescription();
-        if (bodyResponse != null) {
-            try {
-                final JsonObject jsonObject = new JsonParser().parse(bodyResponse).getAsJsonObject();
-                if (jsonObject.has(ERROR) && jsonObject.has(MESSAGE)) {
-                    {
-                        errorMessage = jsonObject.get(MESSAGE).getAsString();
-                    }
-                }
-            } catch (JsonSyntaxException e) {
-                logger.error("Getting error message from body response.", e);
-            }
-        }
-        return errorMessage;
     }
 
     private HttpResponse execute(HttpRequestBase request) throws

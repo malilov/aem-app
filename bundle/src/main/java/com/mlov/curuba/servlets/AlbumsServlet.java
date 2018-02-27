@@ -1,6 +1,7 @@
 package com.mlov.curuba.servlets;
 
 import com.mlov.curuba.core.AlbumsService;
+import com.mlov.curuba.core.Utils;
 import com.mlov.curuba.http.CallManagerService;
 import com.mlov.curuba.http.impl.CallManagerServiceImpl;
 import org.apache.felix.scr.annotations.Reference;
@@ -29,13 +30,12 @@ public class AlbumsServlet extends SlingAllMethodsServlet {
     @Override
     protected void doGet(SlingHttpServletRequest request, SlingHttpServletResponse response)
             throws ServletException, IOException {
+        String result = null;
         response.setCharacterEncoding("UTF-8");
-        response.setContentType("application/json");
-        String result = "Processed";
         PrintWriter writer = response.getWriter();
 
         String artistId = request.getParameter(ARTIST_ID);
-        result = result + albumsService.getArtistAlbums(artistId);
+        result = Utils.getAlbumnsFromJson(albumsService.getArtistAlbums(artistId));
         writer.write(result);
         writer.flush();
         writer.close();
